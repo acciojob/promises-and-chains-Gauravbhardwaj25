@@ -1,51 +1,41 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Promises and Chains</title>
 </head>
 <body>
-
-  <!-- Age Input -->
-  <input type="number" id="age" placeholder="Enter your age">
-  
-  <!-- Name Input -->
-  <input type="text" id="name" placeholder="Enter your name">
-  
-  <!-- Submit Button -->
-  <button id="btn" type="submit">Submit</button>
+  <form id="userForm">
+    <input type="number" id="age" placeholder="Enter your age" />
+    <input type="text" id="name" placeholder="Enter your name" />
+    <button type="submit" id="btn">Submit</button>
+  </form>
 
   <script>
-    document.getElementById("btn").addEventListener("click", function (event) {
-      event.preventDefault(); // Stop page refresh
+    document.getElementById("userForm").addEventListener("submit", function(event) {
+      event.preventDefault();
 
       const age = document.getElementById("age").value.trim();
       const name = document.getElementById("name").value.trim();
 
-      // Validation: Empty inputs
-      if (age === "" || name === "") {
-        alert("Please enter valid details.");
+      if (!age || !name) {
+        alert("Please enter valid details"); // ✅ No period for Cypress match
         return;
       }
 
-      // Create a promise
-      let ageCheckPromise = new Promise((resolve, reject) => {
+      new Promise((resolve, reject) => {
         setTimeout(() => {
-          if (Number(age) > 18) {
+          if (parseInt(age, 10) > 18) {
             resolve(`Welcome, ${name}. You can vote.`);
           } else {
             reject(`Oh sorry ${name}. You aren't old enough.`);
           }
         }, 4000);
-      });
-
-      // Handle promise result
-      ageCheckPromise
-        .then(message => alert(message))
-        .catch(errorMsg => alert(errorMsg));
+      })
+      .then(msg => alert(msg))
+      .catch(msg => alert(msg));
     });
   </script>
-
 </body>
 </html>
